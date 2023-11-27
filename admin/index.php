@@ -1,4 +1,13 @@
-<!DOCTYPE html>
+<?php
+session_start();
+
+// Periksa apakah session pengguna ada atau tidak
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit();
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">

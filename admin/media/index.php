@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+// Periksa apakah session pengguna ada atau tidak
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit();
+}
+
 // Database configuration
 $hostname = 'localhost';
 $database = 'gege_db';
@@ -15,7 +23,7 @@ try {
 
 // Fetch all users from the database
 $stmt = $pdo->query("SELECT * FROM media");
-$galerrys = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$galerys = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -72,51 +80,32 @@ $galerrys = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <h4 class="card-title">All Gallery</h4>
                   <a href="" class="btn btn-primary">Add Gallery</a>
                   <div class="row portfolio-container mt-5">
-                  <div class="col-lg-4 col-md-6 portfolio-item filter-app wow fadeInUp">
+                      <?php
+                         
+                          foreach ($gallerys as $gallery) :
+                        ?>
+                    <div class="col-lg-4 col-md-6 portfolio-item filter-app wow fadeInUp">
                       <div class="portfolio-wrap">
                         <figure>
-                          <img src="../../assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
-                          <a href="../../assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="link-preview portfolio-lightbox" title="Preview"><i class="bx bx-plus"></i></a>
+                          <img src="../../assets/img/portfolio/<?=$gallery['image']?>" class="img-fluid" alt="">
+                          <a href="../../assets/img/portfolio/<?=$gallery['image']?>" data-gallery="portfolioGallery" class="link-preview portfolio-lightbox" title="Preview"><i class="bx bx-plus"></i></a>
                           <a href="portfolio-details.html" class="link-details" title="More Details"><i class="bx bx-link"></i></a>
                         </figure>
 
                         <div class="portfolio-info">
-                          <h4><a href="">App 1</a></h4>
-                          <p>App</p>
+                          <h4><a href=""><?=$gallery['title']?></a></h4>
+                          <p><?=$gallery['description']?></p>
                         </div>
                       </div>
                     </div>
+                    <?php
+                
+                          endforeach;
+                     ?>
 
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-web wow fadeInUp" data-wow-delay="0.1s">
-                      <div class="portfolio-wrap">
-                        <figure>
-                          <img src="../../assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
-                          <a href="../../assets/img/portfolio/portfolio-2.jpg" class="link-preview portfolio-lightbox" data-gallery="portfolioGallery" title="Preview"><i class="bx bx-plus"></i></a>
-                          <a href="" class="link-details" title="More Details"><i class="bx bx-link"></i></a>
-                        </figure>
+                   
 
-                        <div class="portfolio-info">
-                          <h4><a href="">Web 3</a></h4>
-                          <p>Web</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-app wow fadeInUp" data-wow-delay="0.2s">
-                      <div class="portfolio-wrap">
-                        <figure>
-                          <img src="../../assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">
-                          <a href="../../assets/img/portfolio/portfolio-3.jpg" class="link-preview portfolio-lightbox" data-gallery="portfolioGallery" title="Preview"><i class="bx bx-plus"></i></a>
-                          <a href="" class="link-details" title="More Details"><i class="bx bx-link"></i></a>
-                        </figure>
-
-                        <div class="portfolio-info">
-                          <h4><a href="">App 2</a></h4>
-                          <p>App</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                    
                   
                 </div>
               </div>

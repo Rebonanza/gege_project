@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+// Periksa apakah session pengguna ada atau tidak
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit();
+}
+
 // Database configuration
 $hostname = 'localhost';
 $database = 'gege_db';
@@ -22,7 +30,7 @@ if (!isset($_GET['id'])) {
 $userID = $_GET['id'];
 
 // Fetch user data based on the provided ID
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+$stmt = $pdo->prepare("SELECT * FROM users WHERE UserID = ?");
 $stmt->execute([$userID]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -80,18 +88,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="card-body">
                   <h4 class="card-title">Add User</h4>
                 
-                  <form class="forms-sample">
+                  <form class="forms-sample" method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>">
                     <div class="form-group">
                       <label for="exampleInputUsername1">Username</label>
-                      <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Username" name="username">
+                      <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Username" name="username" value="<?=$user['Username']?>">
                     </div>
                     <div class="form-group">
                       <label for="exampleInputEmail1">Email address</label>
-                      <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" name="email">
+                      <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" name="email" value="<?=$user['Email']?>">
                     </div>
                     <div class="form-group">
                       <label for="exampleInputPassword1">Password</label>
-                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password">
+                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password" name="password"  value="<?=$user['Password']?>">
                     </div>
                    
                     <button type="submit" class="btn btn-primary me-2">Submit</button>

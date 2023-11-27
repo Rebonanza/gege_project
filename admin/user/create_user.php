@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+// Periksa apakah session pengguna ada atau tidak
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit();
+}
+
 // Database configuration
 $hostname = 'localhost';
 $database = 'gege_db';
@@ -64,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="card-body">
                   <h4 class="card-title">Add User</h4>
                 
-                  <form class="forms-sample">
+                  <form class="forms-sample" method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>">
                     <div class="form-group">
                       <label for="exampleInputUsername1">Username</label>
                       <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Username" name="username">

@@ -15,20 +15,22 @@ try {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+   
     // Handle login form submission
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = $_REQUEST['username'];
+    $password = $_REQUEST['password'];
 
     // Perform validation and authentication
-    $stmt = $pdo->prepare("SELECT * FROM Users WHERE Username = ? AND Password = ?");
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE Username = ? AND Password = ?");
     $stmt->execute([$username, $password]); // Replace with password hashing in a real-world scenario
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
+   
 
     if ($user) {
         // Set session variable to indicate user is logged in
-        $_SESSION['username'] = $user['Username'];
+        $_SESSION['user'] = $user;
         header('Location: index.php');
         exit();
     } else {
@@ -36,8 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
-<!DOCTYPE html>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -75,16 +75,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               </div>
               <h4>Hello! Selamat datang admin</h4>
               <h6 class="fw-light">Sign in untuk melanjutkan.</h6>
-              <form class="pt-3" method="POST" action="">
+              <form class="pt-3" method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>">
                 <div class="form-group">
-                  <input type="email" class="form-control form-control-lg" id="exampleInputEmail1" placeholder="Username" name="username">
+                  <input type="text" class="form-control form-control-lg" id="exampleInputEmail1" placeholder="Username" name="username">
                 </div>
                 <div class="form-group">
                   <input type="password" class="form-control form-control-lg" id="exampleInputPassword1" placeholder="Password" name="password">
                 </div>
-                <div class="mt-3">
-                  <a class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" href="../../index.html">SIGN IN</a>
-                </div>
+               
+                  <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" name="login">SIGN IN</button>
+                
               </form>
             </div>
           </div>

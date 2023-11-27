@@ -1,4 +1,12 @@
 <?php
+session_start();
+
+// Periksa apakah session pengguna ada atau tidak
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit();
+}
+
 // Database configuration
 $hostname = 'localhost';
 $database = 'gege_db';
@@ -16,6 +24,7 @@ try {
 // Fetch all users from the database
 $stmt = $pdo->query("SELECT * FROM users");
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -55,43 +64,29 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <table class="table table-striped">
                       <thead>
                         <tr>
-                          <th>
-                           #
-                          </th>
-                          <th>
-                            Username
-                          </th>
-                          <th>
-                           email
-                          </th>
-                          <th>
-                           Role
-                          </th>
-                          <th>
-                            Action
-                          </th>
+                          <th>#</th>
+                          <th>Username</th>
+                          <th>Email</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
+                        <?php
+                          $number = 1;
+                          foreach ($users as $user) :
+                        ?>
                         <tr>
-                          <td class="py-1">
-                            1
-                          </td>
+                          <td class="py-1"><?=$number++?></td>
+                          <td><?=$user['Username']?></td>
+                          <td><?=$user['Email']?></td>
                           <td>
-                            halo
+                            <a href="edit_user.php?id=<?=$user['UserID']?>" class="btn btn-warning"><i class='bx bx-edit-alt'></i></a>
+                            <a href="delete?id=<?=$user['UserID']?>" class="btn btn-danger"><i class='bx bx-trash'></i></a>
                           </td>
-                          <td>
-                            halo@gmail.com
-                          </td>
-                          <td>
-                           admin
-                          </td>
-                          <td>
-                            <a href="" class="btn btn-warning"><i class='bx bx-edit-alt'></i></a>
-                            <a href="" class="btn btn-danger"><i class='bx bx-trash'></i></a>
-                          </td>
-                        
                         </tr>
+                        <?php 
+                        endforeach
+                        ?>
                       </tbody>
                     </table>
                   </div>
