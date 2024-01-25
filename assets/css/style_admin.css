@@ -1,0 +1,12 @@
+.nav-pills .nav-item:hover .nav-link {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Styles for the active state of the nav items */
+  .nav-pills .nav-item.active .nav-link {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .bg-dark{
+    background-color: #010c2b !important;
+  }

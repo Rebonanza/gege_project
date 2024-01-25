@@ -1,31 +1,14 @@
- <!-- container-scroller -->
-  <!-- plugins:js -->
-  <script src="../../assets/vendors/js/vendor.bundle.base.js"></script>
-  <!-- endinject -->
-  <!-- Plugin js for this page -->
-  <script src="../../assets/vendors/typeahead.js/typeahead.bundle.min.js"></script>
-  <script src="../../assets/vendors/select2/select2.min.js"></script>
-  <script src="../../assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
-  <!-- End plugin js for this page -->
-  <!-- inject:js -->
-  <script src="../../assets/js/off-canvas.js"></script>
-  <script src="../../assets/js/hoverable-collapse.js"></script>
-  <script src="../../assets/js/template.js"></script>
-  <script src="../../assets/js/settings.js"></script>
-  <script src="../../assets/js/todolist.js"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <script src="../../assets/js/file-upload.js"></script>
-  <script src="../../assets/js/typeahead.js"></script>
-  <script src="../../assets/js/select2.js"></script>
-  <!-- End custom js for this page-->
-  <script src="../../assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../../assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="../../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="../../assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="../../assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="../../assets/vendor/php-email-form/validate.js"></script>
-
-  <!-- Template Main JS File -->
-  <script src="../../assets/js/main.js"></script>
+<!-- plugins:js -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function () {
+    console.log("tes")
+    // Add an "active" class to the clicked nav item
+    $('.nav-pills .nav-link').on('click', function () {
+      $('.nav-pills .nav-item').removeClass('active');
+      $(this).parent().addClass('active');
+    });
+  });
+</script>

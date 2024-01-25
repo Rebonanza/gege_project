@@ -1,4 +1,6 @@
 <?php
+require_once('../config.php');
+
 session_start();
 
 // Periksa apakah session pengguna ada atau tidak
@@ -23,47 +25,52 @@ try {
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title = $_POST['title'];
-    $description = $_POST['description'];
+    $title = htmlspecialchars( $_POST['title'] , ENT_QUOTES, 'UTF-8');
+    $description =   htmlspecialchars( $_POST['description'] , ENT_QUOTES, 'UTF-8');
 
     // File upload handling
-    $targetDirectory = "uploads/";
-    $targetFile = $targetDirectory . basename($_FILES["image"]["name"]);
+    $currentDateTime = date('Ymd_His');
+    $targetDirectory = '../../uploads/';
+    $fileExtension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+    $newFileName = 'image_' . $currentDateTime . '.' . $fileExtension;
+    $targetFile = $targetDirectory .  $newFileName;
     $imageFileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
 
     // Check if the file is an image
     $check = getimagesize($_FILES["image"]["tmp_name"]);
     if ($check === false) {
-        echo "File is not an image.";
+        echo "<script>alert('File is not an image !!');</script>";
         exit();
     }
 
     // Check if the file already exists
     if (file_exists($targetFile)) {
-        echo "File already exists.";
+        echo "<script>alert('File already exists !!');</script>";
         exit();
     }
 
     // Check file size (max 5MB)
-    if ($_FILES["file"]["size"] > 5 * 1024 * 1024) {
-        echo "File is too large.";
+    if ($_FILES["image"]["size"] > 5 * 1024 * 1024) {
+        echo "<script>alert('File is too large !!');</script>";
         exit();
     }
 
     // Allow certain file formats
     $allowedExtensions = ["jpg", "jpeg", "png", "gif"];
     if (!in_array($imageFileType, $allowedExtensions)) {
-        echo "Invalid file format. Only JPG, JPEG, PNG, and GIF are allowed.";
+        echo "<script>alert('Invalid file format. Only JPG, JPEG, PNG, and GIF are allowed !!');</script>";
+       
         exit();
     }
 
     // Move the file to the target directory
     if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
         // Insert data into the database
-        $stmt = $pdo->prepare("INSERT INTO Images (title, description, filename) VALUES (?, ?, ?)");
-        $stmt->execute([$title, $description, basename($_FILES["image"]["name"])]);
-
+        $stmt = $pdo->prepare("INSERT INTO gallery (title, description, image) VALUES (?, ?, ?)");
+        $stmt->execute([$title, $description, $newFileName]);
         echo "Image uploaded successfully.";
+        header('Location: index.php');
+        exit();
     } else {
         echo "Error uploading the file.";
     }
@@ -75,10 +82,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 
 <head>
-  <?php
-    require_once('../../layout/header.php')
+<?php 
+    require_once('../../layout/header.php');
   ?>
-
   <style>
         #drop-area {
             border: 2px dashed #ccc;
@@ -100,65 +106,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
-
 <body>
   <div class="container-scroller">
-    <!-- partial:../../partials/_navbar.html -->
-    <?php
-      require_once('../../layout/navbar.php')
-    ?>
+    
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-      <!-- partial -->
-      <!-- partial:../../partials/_sidebar.html -->
-      <?php
-        require_once('../../layout/sidebar.php')
-      ?>
-      <!-- partial -->
-      <div class="main-panel">        
-        <div class="content-wrapper">
-          <div class="row">
-            <div class="col-lg grid-margin stretch-card">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Add Media</h4>
-                
-                  <form class="forms-sample" enctype="multipart/form-data" method="POST" action="<?php echo $_SERVER['PHP_SELF'];?>">
-                    <div class="form-group">
-                      <label for="exampleInputUsername1">Title</label>
-                      <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Title" name="title">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleInputEmail1">Description</label>
-                      <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Description" name="description">
-                    </div>
-                    <div id="drop-area" class="form-group">
-                        <span>Image</span>
-                        <input type="file" id="file-input" name="image" accept="image/*" style="display: none;" required >
-                        <p>Drag and drop or click to select an image</p>
-                        <div id="image-preview"></div>
-                    </div>
-                    <button type="submit" class="btn btn-primary me-2">Submit</button>
-                    <a href="/gegeproject/admin/media" class="btn btn-light">Cancel</a>
-                  </form>
-                </div>
-              </div>
-            </div>
-            
-          </div>
+      <!-- partial:partials/_sidebar.html -->
+      <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+            <?php require_once('../../layout/sidebar.php');?>
+
         </div>
+       <div class="col py-5">
+       <div class="my-3 p-5 bg-body rounded shadow-sm">
+            <h3 class=" pb-2 mb-2">Add New Media</h3>
+            <form  action="" method="POST" enctype="multipart/form-data">
+                            <div class="mb-3">
+                              <label for="exampleInputUsername1" class="form-label">Title</label>
+                              <input type="text" class="form-control" id="exampleInputUsername1" placeholder="Title" name="title">
+                            </div>
+                            <div class="mb-3">
+                              <label for="exampleInputEmail1" class="form-label">Description</label>
+                              <input type="text" class="form-control" id="exampleInputEmail1" placeholder="description" name="description">
+                            </div>
+                            <label for="exampleInputEmail1" class="form-label">Image</label>
+                            <div id="drop-area" class="form-group">
+                              
+                                <input type="file" id="file-input" name="image" accept="image/*" style="display: none;" required >
+                                <p>Drag and drop or click to select an image</p>
+                                <div id="image-preview"></div>
+                            </div>
+                            <button type="submit" class="btn btn-primary me-2 mt-3">Submit</button>
+                            <a class="btn btn-danger mt-3" href="index.php">Cancel</a>
+              </form>
+          </div>
+       </div>
+      </div>
+    </div>
+      <!-- partial -->
+      
         <!-- content-wrapper ends -->
-        <!-- partial:../../partials/_footer.html -->
-        <?php
-          require_once('../../layout/footer.php')
+        <!-- partial:partials/_footer.html -->
+        <?php 
+          require_once('../../layout/footer.php');
         ?>
         <!-- partial -->
-      </div>
-      <!-- main-panel ends -->
-    </div>
+      
     <!-- page-body-wrapper ends -->
   </div>
-
+  <!-- container-scroller -->
   <script>
     const dropArea = document.getElementById('drop-area');
     const fileInput = document.getElementById('file-input');
@@ -209,8 +205,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // You can access form data using FormData() and send it to the server.
     });
 </script>
-<?php
-  require_once('../../layout/script.php')
+<?php 
+    require_once('../../layout/script.php');
   ?>
 </body>
 

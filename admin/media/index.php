@@ -1,4 +1,6 @@
 <?php
+require_once('../config.php');
+require_once('../function.php');
 session_start();
 
 // Periksa apakah session pengguna ada atau tidak
@@ -22,161 +24,88 @@ try {
 }
 
 // Fetch all users from the database
-$stmt = $pdo->query("SELECT * FROM media");
-$galerys = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$stmt = $pdo->query("SELECT * FROM gallery");
+$gallerys = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <?php
-  require_once('../../layout/header.php')
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Gege Admin - Dashboard</title>
+  <link href="../../assets/css/style.css" rel="stylesheet">
+ 
+ 
+  <?php 
+    require_once('../../layout/header.php');
   ?>
-  <style>
-        #drop-area {
-            border: 2px dashed #ccc;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        #drop-area.highlight {
-            border-color: #218838;
-            background-color: #f8f9fa;
-        }
-
-        #image-preview {
-            max-width: 100%;
-            max-height: 200px;
-            margin-top: 20px;
-        }
-    </style>
 </head>
-
 <body>
   <div class="container-scroller">
-    <!-- partial:../../partials/_navbar.html -->
-    <?php
-          require_once('../../layout/navbar.php');
-        ?>
-    
-    <!-- partial -->
-    <div class="container-fluid page-body-wrapper">
-      <!-- partial -->
-      <!-- partial:../../partials/_sidebar.html -->
-      <?php
-          require_once('../../layout/sidebar.php');
-        ?>
-     
-      <!-- partial -->
-      <div class="main-panel ">        
-        <div class="content-wrapper portfolio">
-            <div class="row ">
-            <div class="col-lg-12 grid-margin stretch-card  ">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">All Gallery</h4>
-                  <a href="" class="btn btn-primary">Add Gallery</a>
-                  <div class="row portfolio-container mt-5">
-                      <?php
-                         
-                          foreach ($gallerys as $gallery) :
-                        ?>
-                    <div class="col-lg-4 col-md-6 portfolio-item filter-app wow fadeInUp">
-                      <div class="portfolio-wrap">
-                        <figure>
-                          <img src="../../assets/img/portfolio/<?=$gallery['image']?>" class="img-fluid" alt="">
-                          <a href="../../assets/img/portfolio/<?=$gallery['image']?>" data-gallery="portfolioGallery" class="link-preview portfolio-lightbox" title="Preview"><i class="bx bx-plus"></i></a>
-                          <a href="portfolio-details.html" class="link-details" title="More Details"><i class="bx bx-link"></i></a>
-                        </figure>
+  <div class="container-fluid page-body-wrapper">
+      <!-- partial:partials/_sidebar.html -->
+      <div class="row flex-nowrap">
+        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+            <?php require_once('../../layout/sidebar.php');?>
 
-                        <div class="portfolio-info">
-                          <h4><a href=""><?=$gallery['title']?></a></h4>
-                          <p><?=$gallery['description']?></p>
-                        </div>
-                      </div>
-                    </div>
-                    <?php
-                
-                          endforeach;
-                     ?>
-
-                   
-
-                    
-                  
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
+       <div class="col py-5">
+       <div class="my-3 p-5 bg-body rounded shadow-sm">
+            <h3 class=" pb-2 mb-2">Gallery</h3>
+            <a href="add_media.php" class="btn btn-success">Add Media</a>
+                <div class="row portfolio-container mt-4">
+                                <?php
+                                  foreach ($gallerys as $gallery) :
+                                ?>
+                                  <div class="col">
+                                    <div class="card shadow border-0" style="width: 20rem;">
+                                    <img src="../../uploads/<?=$gallery['image']?>" class="card-img-top" alt="...">
+                                      <div class="card-body">
+                                        <h5 class="card-title">Card title</h5>
+                                        <p class="card-text"><?=$gallery['description']?></p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                          <div class="btn-group">
+                                          <a href="edit_media.php?id=<?=encryptID($gallery['id'])?>"class="btn btn-warning p-2 me-2"><i class="fa-regular fa-pen-to-square"></i> Edit</a>
+                                            <form action="delete_media.php" class="d-inline mx-0" method="post">
+                                              <input type="hidden" name="id" value="<?=encryptID($gallery['id'])?>">
+                                              <button type="submit" name="delete" class="btn btn-danger p-2" onclick="return confirm('Yakin ingin delete gambar ini ?')" ><i class="fa-regular fa-pen-to-square"></i> Delete</button></form>
+                                          </div>
+                                         
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                <?php
+                                endforeach;
+                                ?>
+                  </div>
+          </div>
+       </div>
+      </div>
+    </div>
+      <!-- partial -->
+     
         <!-- content-wrapper ends -->
-        <!-- partial:../../partials/_footer.html -->
-        <?php
+        <!-- partial:partials/_footer.html -->
+        <?php 
           require_once('../../layout/footer.php');
         ?>
         <!-- partial -->
-      </div>
-      <!-- main-panel ends -->
-    </div>
+    
     <!-- page-body-wrapper ends -->
   </div>
+  <!-- container-scroller -->
 
-  <script>
-    const dropArea = document.getElementById('drop-area');
-    const fileInput = document.getElementById('file-input');
-    const imagePreview = document.getElementById('image-preview');
 
-    dropArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropArea.classList.add('highlight');
-    });
-
-    dropArea.addEventListener('dragleave', () => {
-        dropArea.classList.remove('highlight');
-    });
-
-    dropArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropArea.classList.remove('highlight');
-        const file = e.dataTransfer.files[0];
-        displayImage(file);
-        fileInput.files = e.dataTransfer.files;
-    });
-
-    fileInput.addEventListener('change', () => {
-        const file = fileInput.files[0];
-        displayImage(file);
-    });
-
-    function displayImage(file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            // Create an image element
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.style.maxWidth = '100%';  // Limit the width of the image
-            img.style.maxHeight = '200px';  // Limit the height of the image
-
-            // Append the image to the image preview div
-            imagePreview.innerHTML = '';
-            imagePreview.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    }
-
-    // Add an event listener to the form for handling form submission
-    document.getElementById('upload-form').addEventListener('submit', function (e) {
-        e.preventDefault();
-        // Add your code here to handle the form submission, e.g., using AJAX or submitting the form normally.
-        // You can access form data using FormData() and send it to the server.
-    });
-</script>
-<?php
-require_once('../../layout/script.php');
-?>
+ 
+  
+  <?php 
+    require_once('../../layout/script.php');
+  ?>
+  <!-- End custom js for this page-->
 </body>
 
 </html>
