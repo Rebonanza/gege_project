@@ -2,7 +2,11 @@
 
 require_once('../config.php');
 require_once('../function.php');
-checkSession();
+session_start();
+if (!isset($_SESSION['user'])) {
+  header('Location: ../dashboard/login.php');
+  exit();
+}
 
 // Database configuration
 dbConnection();
@@ -20,7 +24,7 @@ $users = getData('users');
     require_once('../../layout/header.php');
   ?>
 </head>
-<body class="bg-body-tertiary">
+<body >
   <div class="container-scroller">
   <div class="container-fluid page-body-wrapper">
        <div class="row flex-nowrap">

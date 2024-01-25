@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 26, 2023 at 05:33 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.1.17
+-- Generation Time: Jan 25, 2024 at 12:57 PM
+-- Server version: 10.4.20-MariaDB
+-- PHP Version: 8.0.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `gege_db`
 --
-CREATE DATABASE IF NOT EXISTS `gege_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `gege_db`;
 
 -- --------------------------------------------------------
 
@@ -32,7 +30,7 @@ USE `gege_db`;
 CREATE TABLE `categories` (
   `CategoryID` int(11) NOT NULL,
   `CategoryName` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -46,7 +44,7 @@ CREATE TABLE `comments` (
   `CommentDate` datetime DEFAULT current_timestamp(),
   `UserID` int(11) DEFAULT NULL,
   `PostID` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -57,9 +55,16 @@ CREATE TABLE `comments` (
 CREATE TABLE `gallery` (
   `id` int(11) NOT NULL,
   `image` varchar(200) NOT NULL,
-  `title_img` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `gallery`
+--
+
+INSERT INTO `gallery` (`id`, `image`, `title`, `description`) VALUES
+(2, 'image_20240125_082658.png', 'tes', 'halo');
 
 -- --------------------------------------------------------
 
@@ -74,7 +79,7 @@ CREATE TABLE `posts` (
   `PostDate` datetime DEFAULT current_timestamp(),
   `UserID` int(11) DEFAULT NULL,
   `CategoryID` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -88,14 +93,15 @@ CREATE TABLE `users` (
   `Password` varchar(100) NOT NULL,
   `Email` varchar(100) NOT NULL,
   `RegistrationDate` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`UserID`, `Username`, `Password`, `Email`, `RegistrationDate`) VALUES
-(1, 'given', '12345678', '', '2023-11-22 22:17:13');
+(2, 'theo', '$2y$10$V/v0sREkFDB1QDvqN21Tfe.ixxbkPGK2hGt95D32ypCbJ5S.A6c12', 'giventheo2211@gmail.com', '2024-01-25 09:25:02'),
+(3, 'admin', '$2y$10$kQBr2losy5GHuNnQBPBoeeMmcj8aFZzDD6BuBRZEDftAHo.7/dtcu', 'admin@gmail.com', '2024-01-25 18:56:25');
 
 --
 -- Indexes for dumped tables
@@ -143,13 +149,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `gallery`
 --
 ALTER TABLE `gallery`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables

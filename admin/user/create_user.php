@@ -3,11 +3,11 @@ require_once('../config.php');
 require_once('../function.php');
 session_start();
 
-// Periksa apakah session pengguna ada atau tidak
-// if (!isset($_SESSION['user'])) {
-//     header('Location: login.php');
-//     exit();
-// }
+//Periksa apakah session pengguna ada atau tidak
+if (!isset($_SESSION['user'])) {
+    header('Location: ../dashboard/login.php');
+    exit();
+}
 
 
 $pdo = dbConnection();
@@ -28,9 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare("INSERT INTO users (Username, Password, Email) VALUES (?, ?, ?)");
 
     $stmt->execute([$username, $password, $email]); // Replace '' with the user's email
-
+    
     // Redirect to login page after successful registration
-    header('Location: index.php');
+    echo '<script>
+    alert("Berhasil Menambahkan User");
+    window.location.href="index.php";
+    </script>';
     exit();
 }
 ?>

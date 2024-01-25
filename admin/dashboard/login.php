@@ -2,6 +2,11 @@
 require_once('../function.php');
 
 session_start();
+// Periksa apakah session pengguna ada atau tidak
+if (isset($_SESSION['user'])) {
+  header('Location: index.php');
+  exit();
+}
 
 // Database configuration
 $pdo = dbConnection();
@@ -23,7 +28,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $session['username'] = $user['Username'];
         $session['email'] = $user['email'];
         $_SESSION['user'] = $session;
-        header('Location: index.php');
+        
+        echo '<script>
+        alert("Login Berhasil");
+        window.location.href="index.php";
+        </script>';
         exit();
       }else{
         echo "<script>alert('Invalid username or password. Please try again.');</script>";

@@ -5,7 +5,7 @@ session_start();
 
 // Periksa apakah session pengguna ada atau tidak
 if (!isset($_SESSION['user'])) {
-    header('Location: login.php');
+    header('Location: ../dashboard/login.php');
     exit();
 }
 
@@ -68,11 +68,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Insert data into the database
         $stmt = $pdo->prepare("INSERT INTO gallery (title, description, image) VALUES (?, ?, ?)");
         $stmt->execute([$title, $description, $newFileName]);
-        echo "Image uploaded successfully.";
-        header('Location: index.php');
+        echo '<script>
+        alert("Berhasil Menambahkan Gambar");
+        window.location.href="index.php";
+        </script>';
         exit();
     } else {
-        echo "Error uploading the file.";
+        echo '<script>
+        alert("Error Uploading File");
+        window.location.href="index.php";
+        </script>';
+       
     }
 }
 ?>

@@ -5,7 +5,7 @@ session_start();
 
 // Periksa apakah session pengguna ada atau tidak
 if (!isset($_SESSION['user'])) {
-    header('Location: login.php');
+    header('Location: ../dashboard/login.php');
     exit();
 }
 
@@ -38,11 +38,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $stmt->execute([$username, $password, $email, $userID]);
 
   // Redirect to user list page after successful update
-  header('Location: index.php');
+  echo '<script>
+  alert("Berhasil Mengubah User");
+  window.location.href="index.php";
+  </script>';
   exit();
 }else{
   if (!isset($_GET['id']) && $_SERVER['REQUEST_METHOD'] !== 'POST') {
-      echo "User ID not provided.";
+      echo "<script>alert('ERROR')</script>";
       exit();
   }
 

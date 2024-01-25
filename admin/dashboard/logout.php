@@ -9,6 +9,9 @@ if(isset($_SESSION['user'])) {
 }
 
 // Redirect the user to the login page or any other page
-header("Location: login.php");
+echo '<script>
+alert("Berhasil logout");
+window.location.href="index.php";
+</script>';
 exit();
 ?>

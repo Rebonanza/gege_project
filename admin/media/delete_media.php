@@ -3,7 +3,11 @@
 require_once('../function.php');
 
 $db = dbConnection();
-checkSession();
+session_start();
+if (!isset($_SESSION['user'])) {
+    header('Location: ../dashboard/login.php');
+    exit();
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
     // Handle the deletion here
@@ -20,13 +24,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
         $stmt->execute();
        
         // Redirect to a page after successful deletion
-        echo "<script>alert('Berhasil menghapus gambar');</script>";
-        header('Location: index.php');
+        echo '<script>
+        alert("Berhasil Menghapus Gambar");
+        window.location.href="index.php";
+        </script>';
         exit();
     } catch (PDOException $e) {
         $error = "Error deleting record: " . $e->getMessage();
-        echo "<script>alert('".$error."');</script>";
-        header('Location: index.php');
+        echo '<script>
+        alert('".$error."');
+        window.location.href="index.php";
+        </script>';
         exit();
        
     }

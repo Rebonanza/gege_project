@@ -5,10 +5,10 @@ require_once('../config.php');
 session_start();
 
 // Periksa apakah session pengguna ada atau tidak
-// if (!isset($_SESSION['user'])) {
-//     header('Location: login.php');
-//     exit();
-// }
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit();
+}
 
 ?>
 
@@ -20,7 +20,7 @@ session_start();
     require_once('../../layout/header.php');
   ?>
 </head>
-<body class="vh-100">
+<body class=" min-vh-100">
 
 <div class="container-fluid">
     <div class="row flex-nowrap">
@@ -30,14 +30,11 @@ session_start();
         </div>
        <div class="col py-5">
            <h2>Welcome back, Admin</h2>
+         
         </div>
     </div>
-</div>  
-
-
     
-  
-     
+</div>  
 
   <?php
     require_once('../../layout/script.php');

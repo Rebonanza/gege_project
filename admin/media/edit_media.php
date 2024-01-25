@@ -6,7 +6,7 @@ session_start();
 
 // Periksa apakah session pengguna ada atau tidak
 if (!isset($_SESSION['user'])) {
-    header('Location: login.php');
+    header('Location: ../dashboard/login.php');
     exit();
 }
 
@@ -81,12 +81,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' || isset($_POST['update'])) {
           $stmt->bindParam(':new_image_path', $newFileName);
           $stmt->bindParam(':image_id', $imageId, PDO::PARAM_INT);
           $stmt->execute();
-          echo "<script>alert('Image uploaded successfully. !!');</script>";
-          header('Location: index.php');
+          echo '<script>
+          alert("Berhasil Mengubah Data Gambar");
+          window.location.href="index.php";
+          </script>';
           exit();
       } else {
-          echo "<script>alert('Error uploading the file !!');</script>";
-          header('Location: index.php');
+        echo '<script>
+        alert("Error : Ada Kesalahan System");
+        window.location.href="index.php";
+        </script>';
           exit();
       }
     }else{
